@@ -19,4 +19,4 @@ Resources:
       BlockDeviceMappings:
         Ebs:
           VolumeSize: 30
-      KeyName: !Ref 'GetKeyName'
+      KeyName: !Ref 'GetKey'
