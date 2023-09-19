@@ -27,5 +27,6 @@ Resources:
         Ebs:
           VolumeSize: 30
       KeyName: !Ref 'KeyName'
+      Tags:
         - Key: 'Name'
           Value: !Ref 'InstanceName'
