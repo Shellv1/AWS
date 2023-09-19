@@ -21,6 +21,7 @@ Resources:
       ImageId: 'aws/service/ami-amazon-linux-latest/amzn-hvm-x86_64-gp2'
       InstanceType: 't2.micro'
       BlockDeviceMappings:
+      - DeviceName: /dev/sda1
         Ebs:
           VolumeSize: 30
       KeyName: !Ref 'KeyName'
@@ -39,6 +40,7 @@ Resources:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupName: !Ref 'SecurityGroupName'
+      GroupDescription: 'Allow SSH and HTTPS traffic'
       SecurityGroupIngress:
       - IpProtocol: 'tcp'
         FromPort: 22
