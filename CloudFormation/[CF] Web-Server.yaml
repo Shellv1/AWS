@@ -1,14 +1,21 @@
-Description:
-  'Creates an Ubuntu EC2 instance with a web server installed.'
+Description: 'Creates an Ubuntu EC2 instance with a web server installed.'
+
+Parameters:
+  InstanceName:
+    Type: String
+    Default: 'ShellInstance'
+    Description: 'Name of EC2 Instance'
+  KeyName:
+    Type: String
+    Default: !Join [ '', [ !Ref InstanceName, 'KeyPair' ] ]
+    Description: 'Name of EC2 Key Pair'
 
 Resources:
   GetKey:
     Type: 'AWS::EC2::KeyPair'
     Properties:
       KeyFormat: 'pem'
-      KeyName:
-        Type: String
-        Description: 'Name for Key Pair'
+      KeyName: !Ref 'KeyName'
       KeyType: 'rsa'
 
   Instance:
@@ -19,4 +26,6 @@ Resources:
       BlockDeviceMappings:
         Ebs:
           VolumeSize: 30
-      KeyName: !Ref 'GetKey'
+      KeyName: !Ref 'KeyName'
+        - Key: 'Name'
+          Value: !Ref 'InstanceName'
