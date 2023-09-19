@@ -1,6 +1,10 @@
 Description: 'Creates an Ubuntu EC2 instance with a web server installed.'
 
 Parameters:
+  ImageId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: 'aws/service/ami-amazon-linux-latest/amzn-hvm-x86_64-gp2'
+    Description: 'AMI ID for EC2 Instance'
   InstanceName:
     Type: String
     Default: 'ShellInstance'
@@ -15,10 +19,10 @@ Parameters:
     Description: 'Name of EC2 Security Group'
 
 Resources:
-  Instance:
+  myInstance:
     Type: 'AWS::EC2::Instance'
     Properties:
-      ImageId: 'aws/service/ami-amazon-linux-latest/amzn-hvm-x86_64-gp2'
+      ImageId: !Ref 'ImageId'
       InstanceType: 't2.micro'
       BlockDeviceMappings:
       - DeviceName: /dev/sda1
@@ -29,25 +33,37 @@ Resources:
       - Key: 'Name'
         Value: !Ref 'InstanceName'
 
-  KeyPair:
+  myKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties:
       KeyFormat: 'pem'
       KeyName: !Ref 'KeyName'
       KeyType: 'rsa'
 
-  SecurityGroup:
+  mySecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupName: !Ref 'SecurityGroupName'
       GroupDescription: 'Allow SSH and HTTPS traffic'
+      VpcId: !GetAtt myVPC.VpcId
       SecurityGroupIngress:
       - IpProtocol: 'tcp'
         FromPort: 22
         ToPort: 22
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: 'tcp'
+        FromPort: 443
+        ToPort: 443
         CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
       - IpProtocol: -1
         FromPort: -1
         ToPort: -1
         CidrIp: 0.0.0.0/0
+
+  myVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
