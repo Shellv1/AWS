@@ -28,5 +28,5 @@ Resources:
           VolumeSize: 30
       KeyName: !Ref 'KeyName'
       Tags:
-        - Key: 'Name'
-          Value: !Ref 'InstanceName'
+      - Key: 'Name'
+        Value: !Ref 'InstanceName'
