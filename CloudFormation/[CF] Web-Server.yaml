@@ -1,0 +1,22 @@
+Description:
+  'Creates an Ubuntu EC2 instance with a web server installed.'
+
+Resources:
+  GetKey:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyFormat: 'pem'
+      KeyName:
+        Type: String
+        Description: 'Name for Key Pair'
+      KeyType: 'rsa'
+
+  Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: 'aws/service/ami-amazon-linux-latest/amzn-hvm-x86_64-gp2'
+      InstanceType: 't2.micro'
+      BlockDeviceMappings:
+        Ebs:
+          VolumeSize: 30
+      KeyName: !Ref 'GetKeyName'
